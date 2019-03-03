@@ -1,11 +1,31 @@
-== Setup
+# Description
 
+A tool to visualize and analyze digital bank statements based based on user-defined tags.
+
+Currently supported digital bank statement formats:
+* Deutsche Sparkasse
+
+# Setup
+
+```bash
+git clone https://github.com/BubblesToTheLimit/projectX.git 
 python3 -m venv projectX
+cd projectX
 source bin/activate
+pip -r requirements.txt
+```
 
-pip install plotly
+# Usage
 
-== TODO
+```bash
+source bin/activate
+./projectX/main.py <path_to_csv>
+```
 
-add example.csv to data directory
-improve readme
+# How to contribute
+
+Contact the two contributors.
+
+# TODO
+
+* add example.csv to data directory

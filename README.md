@@ -19,7 +19,7 @@ pip -r requirements.txt
 
 ```bash
 source bin/activate
-./projectX/main.py <path_to_csv>
+python3 projectX/main.py <path_to_csv>
 ```
 
 # How to contribute

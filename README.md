@@ -1,6 +1,6 @@
 # Description
 
-A tool to visualize and analyze digital bank statements based based on user-defined tags.
+A tool to visualize and analyze digital bank statements supported by user-defined tags.
 
 Currently supported digital bank statement formats:
 * Deutsche Sparkasse

@@ -1,0 +1,41 @@
+{
+    {
+      id: "Grundausgaben",
+      color: "FF0000",
+      abbuchungen: [
+	  {
+	      id: "Miete",
+              identifier: [
+		  {
+		      type: "regex",
+		      value: "DE452000...."
+		  }
+	      ]
+	  }, {
+	      id: "Strom",
+	      identifier: [
+		  {
+		      type: "regex",
+		      value: "..."
+		  }
+	      ]
+	  }
+        }
+      ]
+    },
+    {
+	id: "Entertainment",
+	color: "00FF00",
+	abbuchungen: [
+	    {
+		id: "Netflix",
+		identifier: [
+		    {
+			type: "regex",
+			value: "..."
+		    }
+		]
+	    }
+	]
+    }
+}

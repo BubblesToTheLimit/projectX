@@ -1,0 +1,15 @@
+{
+    "Grundausgabe": [
+        "miete",
+        "vattenfall"
+    ],
+    "Essen": [
+        "70.00",
+        "rewe"
+    ],
+    "tag_colors": {
+        "Grundausgabe": "#32cd32",
+        "Essen": "#5858FA",
+        "default": ""
+    }
+}

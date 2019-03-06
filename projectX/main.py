@@ -1,22 +1,25 @@
-import Sparkassenparser
-from Tagger import Tagger
 import sys
 import os
+import argparse
 
-dirname = os.path.dirname(__file__)
-csv_path = os.path.join(dirname, '../data/example.csv')
-tagconfig_path = os.path.join(dirname, '../data/tagconfig.json')
+import Sparkassenparser
+from TagConfig import TagConfig
+from Tagger import Tagger
 
-if len(sys.argv) > 1:
-    print('Using csv location', sys.argv[1])
-    csv_path = sys.argv[1]
+
+parser = argparse.ArgumentParser("main script")
+parser.add_argument('-c', '--csv', required=True)
+parser.add_argument('-tc', '--tagconfig', required=True)
+
+args = parser.parse_args()
+
+csv_path = args.csv
+tagconfig_path = args.tagconfig
 
 def main():
     bookings = Sparkassenparser.parse_from_filename(csv_path)
-    tagger = Tagger(tagconfig_path)
-    tagger.tag_bookings(bookings)
-    for booking in bookings:
-        print(booking)
+    tc = TagConfig(tagconfig_path)
+    tc.save(tagconfig_path)
 
 if __name__=='__main__':
     main()

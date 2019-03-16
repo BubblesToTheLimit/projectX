@@ -1,15 +1,28 @@
 {
-    "Grundausgabe": [
-        "miete",
-        "vattenfall"
-    ],
-    "Essen": [
-        "70.00",
-        "rewe"
-    ],
-    "tag_colors": {
-        "Grundausgabe": "#32cd32",
-        "Essen": "#5858FA",
-        "default": ""
+    "tags": {
+        "Grundausgaben": {
+            "abbuchungen": [
+                {
+                    "id": "Miete",
+                    "identifier": [
+                        {
+                            "pattern": "MIETE",
+                            "target": "comment"
+                        }
+                    ]
+                },
+                {
+                    "id": "Strom",
+                    "identifier": [
+                        {
+                            "pattern": "Vattenfall",
+                            "target": "from_to"
+                        }
+                    ]
+                }
+            ],
+            "color": "000000",
+            "id": "Grundausgaben"
+        }
     }
 }

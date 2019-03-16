@@ -11,12 +11,13 @@ class TagConfig:
     - add_category(name)
     - add_booking(c_name, b_name, identifier)
     - add_identifier(c_name, b_name, ...)
-    - remove____
+    TODO:
+    Remove methods, refactoring of methods
     """
     categories = {}
-    f_loc = ""
-    def __init__(self, filename="", categories = {}):
-        self.f_loc = filename
+    file_location = ""
+    def __init__(self, file_location="", categories = {}):
+        self.file_location = file_location
         self.categories = categories
 
     @classmethod
@@ -24,42 +25,40 @@ class TagConfig:
         with open(filename, 'r') as f:
             d = json.load(f)
             print(d)
+        cats = {}
         if 'tags' in d:
             categories = d['tags']
-            cats = {}
             for k, c in categories.items():
-                cat = Category.from_dict(c)
-                if cat.c_id not in cats:
-                    cats[cat.c_id] = cat
+                category = Category.from_dict(c)
+                if category.c_id not in cats:
+                    cats[category.c_id] = category
                 else:
                     print("Error: Duplicate category id!")
-        else:
-            cats = {}
         return cls(filename, cats)
 
-    def save(self, loc=None):
-        l = ""
+    def save(self, save_path=None):
+        path = ""
 
-        if loc == None and self.f_loc == None:
+        if save_path == None and self.file_location == None:
             return -1
-        elif loc == None:
-            l = self.f_loc
+        elif save_path == None:
+            path = self.file_location
         else:
-            l = loc
+            path = save_path
 
-        with open(l, 'w') as f:
-            s = json.dumps({'tags': self.categories}, cls=TagEncoder)
-            json.dump({'tags': self.categories}, f, cls=TagEncoder)
+        with open(path, 'w') as f:
+            #s = json.dumps({'tags': self.categories}, cls=TagEncoder)
+            json.dump({'tags': self.categories}, f, cls=TagEncoder, indent=4, sort_keys=True)
         return 1
             
 
 
     def infer_category(self, booking):
         r = []
-        for name, cat in self.categories.items():
-            for b in cat.b_configs:
+        for name, category in self.categories.items():
+            for b in category.b_configs:
                 if b.matches(booking):
-                    r.append((cat, b))
+                    r.append((category, b))
         if len(r) > 1:
             return {
                 'success': False,
@@ -78,20 +77,20 @@ class TagConfig:
                 'r': r[0]
             }
 
-    def add_category(self, name, color="000000", b_config=[]):
-        if name in self.categories.keys():
-            print('Error: category named:"', name, '" exists already')
+    def add_category(self, c_name, color="000000", b_config=[]):
+        if c_name in self.categories.keys():
+            print('Error: category named:"', c_name, '" exists already')
             return -1
-        c = Category(name, color, b_config)
-        self.categories[name] = c
+        c = Category(c_name, color, b_config)
+        self.categories[c_name] = c
         return 1
 
     def add_booking_type(self, c_name, b_name, i=[]):
         if c_name not in self.categories.keys():
             print('Error: booking cannot be added to category because category "', c_name, '" does not exist')
             return -1
-        b = BookingType(b_name, i)
-        self.categories[c_name].b_configs.append(b)
+        new_booking = BookingType(b_name, i)
+        self.categories[c_name].b_configs.append(new_booking)
         return 1
 
 
@@ -103,7 +102,7 @@ class TagConfig:
             self.categories[c_name].b_configs[b_index].identifiers.append(i)
         except ValueError as e:
             b_ids = [b.b_id for b in self.categories[c_name].b_configs]
-            pprint.pprint(e)
+            #pprint.pprint(e)
             print('Error: identifier cannot be added to booking type because booking "', b_name, '" does not exist for category ', c_name, ' - ', b_ids)
 
 class Category:
@@ -137,7 +136,7 @@ class BookingType:
     def __init__(self, b_id, identifier):
         self.b_id = b_id
         self.identifiers = identifier
-        self.identifiers = list(map(lambda x: RegexIdentifier.from_dict(x), self.identifiers))
+        self.identifiers = list(map(lambda x: Identifier.from_dict(x), self.identifiers))
 
     @classmethod
     def from_dict(cls, d):
@@ -156,38 +155,38 @@ class BookingType:
                 return True
         return False
 
-class RegexIdentifier:
-    t = ""
+class Identifier:
+    target = ""
     pattern = None
 
     def __init__(self, t, v):
-        self.t = t
+        self.target = t
         self.pattern = re.compile(v)
 
     @classmethod
     def from_dict(cls, d):
-        if not 'type' in d or not 'value' in d:
+        if not 'target' in d or not 'pattern' in d:
             raise ValueError('Invalid json/dict: ' + str(d))
-        t = d['type']
-        v = d['value']
+        t = d['target']
+        v = d['pattern']
         return cls(t, v)
 
     def reprJSON(self):
-        return dict(type=self.t, value=self.pattern.pattern)
+        return dict(target=self.target, pattern=self.pattern.pattern)
 
     def set_value(self, v):
         self.pattern = re.compile(v)
 
     def matches(self, booking):
-        if self.t == "comment":
+        if self.target == "comment":
             return self.pattern.match(booking.comment)
-        elif self.t == "from_to":
+        elif self.target == "from_to":
             return self.pattern.match(booking.from_to)
-        elif self.t == "iban":
+        elif self.target == "iban":
             return self.pattern.match(booking.iban)
-        elif self.t == "value":
+        elif self.target == "value":
             return self.pattern.match(booking.value)
-        elif self.t == "booking_type":
+        elif self.target == "booking_type":
             return self.pattern.match(booking.booking_type)
         else:
             raise ValueError('Invalid RegexType')

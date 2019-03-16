@@ -1,5 +1,6 @@
 import Sparkassenparser
 from Tagger import Tagger
+import Plotter
 import sys
 import os
 
@@ -13,10 +14,14 @@ if len(sys.argv) > 1:
 
 def main():
     bookings = Sparkassenparser.parse_from_filename(csv_path)
+    
     tagger = Tagger(tagconfig_path)
     tagger.tag_bookings(bookings)
+
     for booking in bookings:
         print(booking)
+
+    Plotter.plot_daily_expenses(bookings, "01.01.19", "31.03.19")
 
 if __name__=='__main__':
     main()

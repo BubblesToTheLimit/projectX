@@ -6,6 +6,8 @@ etc/
 data/*
 projectX/__*
 share/*
+*.js
+*.html
 
 .Python
 [Bb]in

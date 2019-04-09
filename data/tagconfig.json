@@ -1,4 +1,7 @@
 {
+    "Einkommen": [
+        "gehalt"
+    ],
     "Grundausgabe": [
         "miete",
         "vattenfall"

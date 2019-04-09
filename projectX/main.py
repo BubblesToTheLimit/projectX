@@ -21,7 +21,7 @@ def main():
     for booking in bookings:
         print(booking)
 
-    Plotter.plot_daily_expenses(bookings, "01.01.19", "31.03.19")
+    Plotter.plot_timeframe(bookings, "20.02.19", "31.03.19")
 
 if __name__=='__main__':
     main()

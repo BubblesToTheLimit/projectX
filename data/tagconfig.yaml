@@ -1,0 +1,22 @@
+---
+categories:
+  - name: Grundausgaben
+    color: '#228B22'
+    items:
+    - name: Miete
+      identifiers:
+      - pattern: MIETE
+        target: comment
+    - name: Strom
+      identifiers:
+      - pattern: Vattenfall
+        target: from_to
+  - name: Essen
+    items:
+    - name: Supermarkt
+      identifiers:
+      - pattern: REWE
+        target: from_to
+
+defaults:
+  color: '#D3D3D3'

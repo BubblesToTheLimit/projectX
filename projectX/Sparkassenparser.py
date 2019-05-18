@@ -12,7 +12,6 @@ def parse_from_filename(fn, delimiter=';'):
                 if first_line:
                     first_line = False
                     continue
-                #print(line)
                 o = parse_line(line)
                 result.append(o)
             return result

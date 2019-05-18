@@ -3,6 +3,9 @@ import yaml
 from typing import Generic, List
 
 class Identifier:
+    """
+    A helper class: With the help of a target field and a pattern a booking can be assigned to an item.
+    """
     pattern: str
     target: str
 
@@ -18,6 +21,9 @@ class Identifier:
         return ",".join([self.pattern, self.target])
 
 class Item:
+    """
+    A helper class: An item groups multiple identifiers under a common name.
+    """
     name: str
     identifiers: List[Identifier]
 
@@ -38,6 +44,9 @@ class Item:
         return ",".join([self.name, identifierstring])
 
 class Category:
+    """
+    A helper class. A category can contain multiple items. Bookings can be assigned to a category.
+    """
     name: str
     color: str
     item: List[Item]
@@ -66,6 +75,9 @@ class Category:
         return ",".join([self.name, self.color, itemstring])
 
 class TagConfig:
+    """
+    The main class. Loads the configuration from a yaml file.
+    """
     categories = List[Category]
     default_color = "#FFFFFF"
 
@@ -76,7 +88,7 @@ class TagConfig:
             print(f"Couldn't open file {filename}")
             sys.exit()
 
-        config = yaml.load(f)
+        config = yaml.load(f, Loader=yaml.FullLoader)
 
         default_color = config.get("defaults",{}).get("color", self.default_color)
         self.default_color = default_color

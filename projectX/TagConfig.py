@@ -4,7 +4,7 @@ from typing import Generic, List
 
 class Identifier:
     """
-    A helper class: With the help of a target field and a pattern a booking can be assigned to an item.
+    A helper class: Given a booking's target field and a pattern this class determines a match
     """
     pattern: str
     target: str
@@ -19,6 +19,18 @@ class Identifier:
 
     def __str__(self):
         return ",".join([self.pattern, self.target])
+
+    def matches(self, booking):
+        try:
+            value = booking.__dict__[self.target]
+        except:
+            print(f"Couldn't find {self.target} in booking class. Has to be one of {booking.__dict__.keys()}")
+            sys.exit()
+
+        if self.pattern in value:
+            return True
+        else:
+            return False
 
 class Item:
     """
@@ -45,7 +57,7 @@ class Item:
 
 class Category:
     """
-    A helper class. A category can contain multiple items. Bookings can be assigned to a category.
+    A helper class. A category groups multiple items under common name and a color.
     """
     name: str
     color: str
@@ -77,6 +89,7 @@ class Category:
 class TagConfig:
     """
     The main class. Loads the configuration from a yaml file.
+    Infers booking meta-information using its subclasses.
     """
     categories = List[Category]
     default_color = "#FFFFFF"
@@ -112,11 +125,6 @@ class TagConfig:
         for category in self.categories:
             for item in category.item:
                 for identifier in item.identifiers:
-                    try:
-                        value = booking.__dict__[identifier.target]
-                    except:
-                        print(f"Couldn't find {identifier.target} in booking class. Has to be one of {booking.__dict__.keys()}")
-                        sys.exit()
-                    if identifier.pattern in value:
+                    if identifier.matches(booking):
                         return category.name
         return ""
